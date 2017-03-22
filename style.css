@@ -1,6 +1,6 @@
 body{background-color: #e5f5e0; font-family:arial, 'Times New Roman', 'calibri', sans-serif;}
 
-.header{font-family: arial; font-size: 9; position: fixed} 
+.header{font-size: 9; position: fixed} 
 
 h1{
 	text-align:center; /* mein erstes Stylesheet*/
@@ -14,7 +14,7 @@ h1,h2,h3{color: black;
 	font-family: serif
 }
 
-ol div{font-weight: bold}
+ol{font-weight: bold}
 
 ul{border: 1px dashed blue; width: 200px} 
 

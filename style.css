@@ -20,8 +20,7 @@ ul{border: 1px dashed blue; width: 200px}
 
 img{height:380px; width: 400px; padding: 1em 2em 1em 2em}
 
-figure{ display: block;
-		border: 2px solid black;
+figure{		border: 2px solid black;
 		padding: 1em 2em 1em 2em;
 }
 

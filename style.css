@@ -1,0 +1,31 @@
+body{background-color: #e5f5e0; font-family:arial, 'Times New Roman', 'calibri', sans-serif; }
+
+.header{font-family: arial; font-size: 9; position: fixed} 
+
+h1{
+	text-align:center; /* mein erstes Stylesheet*/
+	font-size:80px;
+	font-family: serif;
+	background-color: #ffffcc;
+	; border-radius: 5px; padding: 1px; 
+}
+
+h1,h2,h3{color: black;
+	font-family: serif
+}
+
+ol div{font-weight: bold}
+
+ul{border: 1px dashed blue; width: 200px} 
+
+img{height:380px; width: 400px; margin: auto}
+
+figure{ display: block;
+		border: 2px solid black;
+		padding: 1em 2em 1em 2em;
+}
+
+.link{position: relative; text-align: center; text-decoration: none; border-radius: 100%; border: 2px solid green; background-color:#74a9cf; font-style: italic}
+
+
+figcaption{text-decoration: none; font-size: 9px; color: black}

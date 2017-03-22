@@ -1,6 +1,6 @@
 body{background-color: #e5f5e0; font-family:arial, 'Times New Roman', 'calibri', sans-serif;}
 
-.header{font-size: 9; position: fixed} 
+.header{font-size: 9; position: fixed; margin-left: 1200px} 
 
 h1{
 	text-align:center; /* mein erstes Stylesheet*/
@@ -14,14 +14,14 @@ h1,h2,h3{color: black;
 	font-family: serif
 }
 
-ol{font-weight: bold}
+ol{font-weight: bold} /*wie bekomm ich das andere nicht fett??*/
 
 ul{border: 1px dashed blue; width: 200px} 
 
 img{height:380px; width: 400px; padding: 1em 2em 1em 2em}
 
 figure{		border: 2px solid black;
-		padding: 1em 2em 1em 2em;
+		margin-left: 400px; margin-right: 400px; width: 500px;
 }
 
 .link{position: relative; text-align: center; text-decoration: none; border-radius: 100%; border: 2px solid green; background-color:#74a9cf; font-style: italic}

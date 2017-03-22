@@ -18,7 +18,7 @@ ol{font-weight: bold}
 
 ul{border: 1px dashed blue; width: 200px} 
 
-img{height:380px; width: 400px; margin: auto}
+img{height:380px; width: 400px; margin: auto; padding: 1em 2em 1em 2em}
 
 figure{ display: block;
 		border: 2px solid black;

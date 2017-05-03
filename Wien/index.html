@@ -3,6 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
+	<!-- Anpassung an Handyformat, einfach copy/paste aus leaflet tutorial -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Stadtspaziergang Wien</title>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
@@ -20,13 +22,23 @@
         h1 {
             text-align: center;
         }
-
+		<!--
         #wienMap {
             width: 900px;
             height: 600px;
             border: 1px solid black;
             margin: auto;
-        }
+        }*/
+		-->
+		<!-- Ränder einrücken etc (im Zuge des mobile leaflet geändert) -->
+			body {
+				padding: 0;
+				margin: 0;
+			}
+			html, body, #wienMap {
+				height: 100vh;
+				width: 100vw;
+			};
     </style>
 </head>
 
@@ -87,15 +99,6 @@
             zoom: 12
         });
 		
-		// Location hinzufügen, wo man ist, und es gleich auf Smartphone sehen.
-		 map.locate({setView: true, maxZoom: 16});
-        function onLocationFound(e) {
-            var radius = e.accuracy / 2;
-            L.marker(e.latlng).addTo(map)
-                .bindPopup("Sie befinden sich innerhalb von " + radius + " Metern von diesem Punkt").openPopup();
-            L.circle(e.latlng, radius).addTo(map);
-        }
-        map.on('locationfound', onLocationFound);;
 		
         // Maßstab hinzufügen
         L.control.scale({
@@ -218,6 +221,18 @@
         // Ausschnitt setzen
         // TODO: Ausschnitt auf Stationen des Stadtpaziergangs setzen
 		map.fitBounds(punkteSpaziergang.getBounds());
+		
+		
+		// Location hinzufügen, wo man ist, und es gleich auf Smartphone sehen.
+
+		map.locate({setView: true, maxZoom: 16});
+        function onLocationFound(e) {
+            var radius = e.accuracy / 2;
+            L.marker(e.latlng).addTo(map)
+                .bindPopup("Sie befinden sich innerhalb von " + radius + " Metern von diesem Punkt").openPopup();
+            L.circle(e.latlng, radius).addTo(map);
+        }
+        map.on('locationfound', onLocationFound);;
     </script>
 
 </body>

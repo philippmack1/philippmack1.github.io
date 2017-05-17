@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+	<!-- Anpassung an Handyformat, einfach copy/paste aus leaflet tutorial -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Route Innsbruck-Wien</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+	
+	<!-- Routing machine -->
+	
+	<link rel="stylesheet" href="leaflet-routingmachine/leaflet-routing-machine.css" />
+	<script src="leaflet-routingmachine/leaflet-routing-machine.js"></script>
+	
+    <style>
+			h1 {
+            text-align: center;
+        }
+		<!--
+        #wienMap {
+            width: 900px;
+            height: 600px;
+            border: 1px solid black;
+            margin: auto;
+        }*/
+		-->
+		<!-- Ränder einrücken etc (im Zuge des mobile leaflet geändert) -->
+			body {
+				padding: 0;
+				margin: 0;
+			}
+			html, body, #wienMap {
+				height: 100vh;
+				width: 100vw;
+			};
+    </style>
+</head>
+
+<body>
+
+
+    <div id="wienMap"></div>
+
+    <script>
+
+		
+        // WMTS-Layer definieren - Quelle: http://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml
+        // TODO: WMTS-Layer Wien, Luftbild 1956 hinzufügen - Quelle: http://maps.wien.gv.at/wmts/1.0.0/WMTSCapabilities.xml (nach lb1956 suchen und dann wie bei basemap.at die ResourceURL anpassen, Datenquelle: Stadt Wien – data.wien.gv.at)
+        var layers = {
+            geolandbasemap: L.tileLayer("https://{s}.wien.gv.at/basemap/geolandbasemap/normal/google3857/{z}/{y}/{x}.png", {
+                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+            }),
+            bmapgrau: L.tileLayer("https://{s}.wien.gv.at/basemap/bmapgrau/normal/google3857/{z}/{y}/{x}.png", {
+                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+            }),
+            bmapoverlay: L.tileLayer("https://{s}.wien.gv.at/basemap/bmapoverlay/normal/google3857/{z}/{y}/{x}.png", {
+                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+            }),
+            bmaphidpi: L.tileLayer("https://{s}.wien.gv.at/basemap/bmaphidpi/normal/google3857/{z}/{y}/{x}.jpeg", {
+                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+            }),
+            bmaporthofoto30cm: L.tileLayer("https://{s}.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.jpeg", {
+                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+            }),
+            osm: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                subdomains: ['a', 'b', 'c'],
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }),
+			/* über angegebenen Link Luftbild hinzufügen; subdomains definieren und Link angeben; {tile matrix set} grau; tilematrix ist google3857 {style} als name des layers;
+			Tile Matrix ist z; Tile row ist y; tile col ist x*/ 
+			lb1956: L.tileLayer("http://{s}.wien.gv.at/wmts/lb1956/grau/google3857/{z}/{y}/{x}.jpeg", {
+                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+                attribution: 'Datenquelle: <a href="maps.wien.gv.at/">Stadt Wien</a>'
+            })
+        };
+
+        // Karte definieren und Ausschnitt setzen
+        var map = L.map('wienMap', {
+            layers: [layers.bmapgrau],
+            //center: [47.263, 11.394],
+            zoom: 8
+        });
+		
+        // Maßstab hinzufügen
+        L.control.scale({
+            maxWidth: 200,
+            metric: true,
+            imperial: false
+        }).addTo(map);
+
+        // WMTS-Layer Auswahl und Marker Auswahl Overlay hinzufügen
+        // WMTS-Layer Wien, Luftbild 1956 zur Hintergrundlayerauswahl hinzufügen
+        // GeoJSON Layer Märkte ein/aus Overlay hinzufügen
+        L.control.layers({
+            "basemap.at - STANDARD": layers.geolandbasemap,
+            "basemap.at - GRAU": layers.bmapgrau,
+            "basemap.at - OVERLAY": layers.bmapoverlay,
+            "basemap.at - HIGH-DPI": layers.bmaphidpi,
+            "basemap.at - ORTHOFOTO": layers.bmaporthofoto30cm,
+            "OpenStreetMap": layers.osm,
+			"basemap.at - Luftbild 1956": layers.lb1956,
+        }).addTo(map)
+		
+		// Routing
+		L.Routing.control({
+		waypoints: [
+		L.latLng(47.268583, 11.393264),
+		L.latLng(48.208493, 16.373118)
+		]
+		}).addTo(map);
+    </script>
+
+</body>
+
+</html>

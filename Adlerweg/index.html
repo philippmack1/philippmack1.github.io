@@ -11,24 +11,33 @@
 	<link rel="stylesheet" href="js/leaflet-elevation/leaflet.elevation-0.0.4.css"/>
     <script src="js/leaflet/leaflet.js"></script>
     <script src="js/leaflet-hash/leaflet-hash.js"></script> 
-	<script src="data/adlerwegetappe09.js"></script> <!-- auf Pfad zurückgreifen, auf dem geojson datei (ehemalig gpx) liegt-->
+	<!-- <script src="data/adlerwegetappe09.js"></script>  auf Pfad zurückgreifen, auf dem geojson datei (ehemalig gpx) liegt - brauchen wir nichtmehrm, da wir über omnivore es direkt laden-->
 	<script src="js/leaflet-elevation/leaflet.elevation-0.0.4.min.js"></script> 
 	<script src="data/adlerwegetappe09.js"></script> 
 	<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script> <!-- für elevation Plugin muss bestimmte Bibliothek hinzugefügt werden-->
+	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
 	
     <style>
         body {
             padding: 0px;
             margin: 0px;
         }
-        html, body, #map {
+        html, body {
             height: 100vh;
             width: 100vw;
+        }
+		#map {
+            height: 600px;
+            width: 1024px;
+			margin: auto;
         }
     </style>
 </head>
 
 <body>
+	<h1>Lamsenjochhütte – Falkenhütte</h1>
+	<p> Diese Etappe am Adlerweg führt von der 1908 errichteten Lamsenjochhütte auf knapp 2.000 Metern zur Falkenhütte. Die Tour durchquert dabei den „Großen Ahornboden“, ein Naturdenkmal mit mehr als 2.000 Bergahornen.</p>
+	
     <div id="map"></div>
 
     <script>
@@ -86,18 +95,37 @@
 
         // leaflet-hash aktivieren
         var hash = new L.Hash(map);
-		L.geoJSON(window.etappe09).addTo(map); // geojson file zu Karte hinzufügen (der alte GPS Track)
+		// L.geoJSON(window.etappe09).addTo(map); // geojson file zu Karte hinzufügen (der alte GPS Track) --> auskommentiert, da durch omnivore eingefügt. Jetzt funktioniert aber das elevation nicht mehr.
 		
-		//Etappe laden --> elevation ding holen
+		//Etappe laden --> elevation plugin in Karte darstellen. Markiert man in Höhenprofil bestimmten Bereich, dann zoomed er automatisch rein
 		
-		console.log(window.etappe09);
-		var el=L.control.elevation();
-		el.addTo(map);
-		L.geoJSON(window.etappe09,{
-			onEachFeature: el.addData.bind(el)
-		}).addTo(map);
+		//console.log(window.etappe09);
+		//var el=L.control.elevation();
+		//el.addTo(map);
+		//L.geoJSON(window.etappe09,{
+		//	onEachFeature: el.addData.bind(el)
+		//}).addTo(map);
 		
-		// Hütten hinzufügen; icons von mapicons.mapsmarker.com ---> NOCHMAL ANDERE HÜTTEN REIN!!!
+		// Höhenprofil control hinzufügen
+        var profileControl = L.control.elevation({
+            position : 'bottomleft',
+            theme : 'steelblue-theme'
+        });
+        profileControl.addTo(map);
+
+		
+		// gpx track in Karte darstellen
+		var etappe =omnivore.gpx('data/AdlerwegEtappe09.gpx').addTo(map);
+		
+		// Ausschnitt setzen
+            //map.fitBounds(etappe.getBounds());
+        
+		// Höhenprofil erzeugen
+         etappe.eachLayer(function(layer) {
+            profileControl.addData(layer.feature);
+            });
+			
+		// Hütten hinzufügen; icons von mapicons.mapsmarker.com
 		var huts =[
 			L.marker([47.397194, 11.578000],{title:"Binsalm", icon: L.icon({iconUrl:'icons/hut.png'}) }),
 			L.marker([47.399354, 11.557790],{title:"Engalm", icon: L.icon({iconUrl:'icons/hut.png'}) }),

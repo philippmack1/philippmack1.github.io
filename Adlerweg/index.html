@@ -31,6 +31,12 @@
             width: 1024px;
 			margin: auto;
         }
+		h1{
+			text-align: center;
+			}
+		p{
+			text-align: center;
+		}
     </style>
 </head>
 
@@ -39,7 +45,7 @@
 	<p> Diese Etappe am Adlerweg führt von der 1908 errichteten Lamsenjochhütte auf knapp 2.000 Metern zur Falkenhütte. Die Tour durchquert dabei den „Großen Ahornboden“, ein Naturdenkmal mit mehr als 2.000 Bergahornen.</p>
 	
     <div id="map"></div>
-
+<p>Philipp Mack, github.com/philippmack1 </p>
     <script>
         // WMTS-Layer basemap.at - Quelle: http://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml
         var layers = {
@@ -100,54 +106,79 @@
 		//Etappe laden --> elevation plugin in Karte darstellen. Markiert man in Höhenprofil bestimmten Bereich, dann zoomed er automatisch rein
 		
 		//console.log(window.etappe09);
-		//var el=L.control.elevation();
-		//el.addTo(map);
+		var el=L.control.elevation({
+		position: "bottomleft"});
+		el.addTo(map);
 		//L.geoJSON(window.etappe09,{
 		//	onEachFeature: el.addData.bind(el)
 		//}).addTo(map);
 		
-		// Höhenprofil control hinzufügen
-        var profileControl = L.control.elevation({
-            position : 'bottomleft',
-            theme : 'steelblue-theme'
-        });
-        profileControl.addTo(map);
 
 		
 		// gpx track in Karte darstellen
 		var etappe =omnivore.gpx('data/AdlerwegEtappe09.gpx').addTo(map);
 		
+		 // nach erfolgreichem Laden Popup hinzufügen, Ausschnitt setzen und Höhenprofil erzeugen
+        etappe.on('ready', function () {
+            // Popup hinzufügen
+            var markup = '<h3>Adlerweg-Etappe 9: Lamsenjochhütte – Falkenhütte</h3>';
+            markup += '<p>Die erste Etappe am Adlerweg führt vom St. Johanner Ortsteil Hinterkaiser zur Gaudeamushütte auf 1.263 Metern Seehöhe. Zei besondere Naturschauspiele entlang der Strecke sind der imposante Schleierwasserfall und die Höhle Diebsöfen.</p>'
+            markup += '<li>Ausgangspunkt: Lamsenjochhütte</li>';
+            markup += '<li>Endpunkt: Falkenhütte</li>';
+            markup += '<li>Höhenmeter bergauf: 810</li>';
+            markup += '<li>Höhenmeter bergab: 920</li>';
+            markup += '<li>Höchster Punkt: 1959</li>';
+            markup += '<li>Schwierigkeitsgrad: mittelschwierig</li>';
+            markup += '<li>Streckenlänge (in km): 12,5</li>';
+            markup += '<li>Gehzeit (in Stunden): 4,5</li>';
+            markup += '<li>Einkehrmöglichkeiten: Lamsenjochhütte, Binsalm, Engalm, Falkenhütte</li>';
+            markup += '<li><a href="http://www.tirol.at/reisefuehrer/sport/wandern/wandertouren/a-adlerweg-etappe-9-lamsenjochhuette-falkenhuette">Weitere Informationen</a></li>';
+            etappe.bindPopup(markup, { maxWidth : 450 });
+
+		
 		// Ausschnitt setzen
-            //map.fitBounds(etappe.getBounds());
+            map.fitBounds(etappe.getBounds());
         
 		// Höhenprofil erzeugen
          etappe.eachLayer(function(layer) {
-            profileControl.addData(layer.feature);
+            el.addData(layer.feature);
             });
-			
-		// Hütten hinzufügen; icons von mapicons.mapsmarker.com
-		var huts =[
-			L.marker([47.397194, 11.578000],{title:"Binsalm", icon: L.icon({iconUrl:'icons/hut.png'}) }),
-			L.marker([47.399354, 11.557790],{title:"Engalm", icon: L.icon({iconUrl:'icons/hut.png'}) }),
-			L.marker([47.400113, 11.498828],{title:"Falkenhütte", icon: L.icon({iconUrl:'icons/hut.png'}) }),
-			L.marker([47.380292, 11.603494],{title:"Lamsenjochhütte", icon: L.icon({iconUrl:'icons/hut.png'}) }),
+		
+		var start = [ 	
+			L.marker([47.39962730, 11.49907520],{title:"Ziel", icon: L.icon({iconUrl:'icons/ziel.png', iconAnchor:[16,37]}) }),
+			L.marker([47.38010940, 11.60356740],{title:"Start", icon: L.icon({iconUrl:'icons/start.png', iconAnchor:[16,37]}) }),
 			];
-			var hutsLayer=L.featureGroup();
-			for (var i=0; i<huts.length; i++) {  // so viele Einträge wie drin sind soll durch eins erhöht werden
-				hutsLayer.addLayer(huts[i]);
+			var startLayer=L.featureGroup();
+			for (var i=0; i<start.length; i++) {  // so viele Einträge wie drin sind soll durch eins erhöht werden
+				startLayer.addLayer(start[i]);
+				}
+				startLayer.addTo(map);
+			
+		
+		// Hütten hinzufügen; icons von mapicons.mapsmarker.com
+		var POI =[
+			L.marker([47.397194, 11.578000],{title:"Binsalm", icon: L.icon({iconUrl:'icons/hut.png', iconAnchor:[16,37]}) }),
+			L.marker([47.399354, 11.557790],{title:"Engalm", icon: L.icon({iconUrl:'icons/hut.png', iconAnchor:[16,37]}) }),
+			L.marker([47.400113, 11.498828],{title:"Falkenhütte", icon: L.icon({iconUrl:'icons/hut.png', iconAnchor:[16,37]}) }),
+			L.marker([47.38, 11.603333],{title:"Lamsenjochhütte", icon: L.icon({iconUrl:'icons/hut.png', iconAnchor:[16,37]}) }),
+			];
+			var POILayer=L.featureGroup();
+			for (var i=0; i<POI.length; i++) {  // so viele Einträge wie drin sind soll durch eins erhöht werden
+				POILayer.addLayer(POI[i]);
 			}	
 			//hutsLayer.addTo(map);
 			map.on("zoomend", function(){
 				if(map.getZoom()>=15){
-					map.addLayer(hutsLayer);
+					map.addLayer(POILayer);
 				} else{
-					map.removeLayer(hutsLayer);
+					map.removeLayer(POILayer);
 				}
+			})
 			});
 			
 
     </script>
-
+	
 </body>
 
 </html>
